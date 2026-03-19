@@ -1,22 +1,23 @@
-# Exercise 2: Working with Time-Series Data in Python
+# Exercise 2: Preparing and Exploring Time-Series Data
 
 ## Context
 
-A city's bike-share program hands you a CSV of daily ride counts. Three years of data — but it's messy. Missing dates, duplicate rows, unit errors, outliers, and negative values are hiding in the data. None of it is labeled.
+Before you can build a reliable forecast, you must understand your data. This exercise focuses on the essential exploratory and preparation steps that turn a raw dataset into a model-ready time series. While these steps can feel like "cleaning," they are a critical part of the analytical process that directly impacts model performance.
+
+You have a CSV of daily ride counts from a city's bike-share program.
 
 ## Exercise
 
-Open `starter/starter.ipynb` and implement the data cleaning and analysis functions:
+Open `starter/starter.ipynb` and implement the following data exploration and transformation functions:
 
-1. **Find missing dates** and **duplicates**
-2. **Detect and fix unit errors** (October 2023 hourly-vs-daily issue)
-3. **Detect outliers** and **fix negative values**
-4. **Fill gaps** with interpolation
-5. **Compute rolling statistics** and **run the ADF stationarity test**
+1.  **Establish a Valid Time Index:** Ensure the data has a complete and unique time index by handling any missing dates or duplicate entries.
+2.  **Explore and Validate Values:** Investigate the data for potential issues like outliers or errors. This step is crucial for building robust models.
+3.  **Handle Gaps:** Use interpolation to fill in any missing data points so that you can apply time-series models that require continuous data.
+4.  **Analyze Stationarity:** Use rolling statistics and statistical tests (like the ADF test) to understand the series' behavior over time. This will inform which modeling techniques you'll use in the next lesson.
 
 ## Data
 
-- `data/bikeshare_rides.csv` — daily ride counts, January 2022 through December 2024 (with intentional errors)
+-   `data/bikeshare_rides.csv` — daily ride counts, January 2022 through December 2024.
 
 ## Solution
 
