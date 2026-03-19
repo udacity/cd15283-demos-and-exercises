@@ -1,19 +1,18 @@
-# Exercise 2: Preparing and Exploring Time-Series Data
+# Exercise 2: Analyzing Time-Series Data in Python
 
 ## Context
 
-Before you can build a reliable forecast, you must understand your data. This exercise focuses on the essential exploratory and preparation steps that turn a raw dataset into a model-ready time series. While these steps can feel like "cleaning," they are a critical part of the analytical process that directly impacts model performance.
+This exercise focuses on the core analytical techniques used to understand time-series data. Instead of data cleaning, you will focus on methods that reveal patterns, trends, and statistical properties, which are essential for choosing the right forecasting model.
 
 You have a CSV of daily ride counts from a city's bike-share program.
 
 ## Exercise
 
-Open `starter/starter.ipynb` and implement the following data exploration and transformation functions:
+Open the new `starter/starter.ipynb` and perform the following analytical tasks:
 
-1.  **Establish a Valid Time Index:** Ensure the data has a complete and unique time index by handling any missing dates or duplicate entries.
-2.  **Explore and Validate Values:** Investigate the data for potential issues like outliers or errors. This step is crucial for building robust models.
-3.  **Handle Gaps:** Use interpolation to fill in any missing data points so that you can apply time-series models that require continuous data.
-4.  **Analyze Stationarity:** Use rolling statistics and statistical tests (like the ADF test) to understand the series' behavior over time. This will inform which modeling techniques you'll use in the next lesson.
+1.  **Resampling:** Aggregate the data from a daily to a weekly frequency to analyze broader trends.
+2.  **Rolling Statistics:** Calculate and visualize rolling averages to understand the series' local behavior and smooth out short-term fluctuations.
+3.  **Stationarity Testing:** Use a statistical test (Augmented Dickey-Fuller) to determine if the series is stationary, a critical assumption for many classical forecasting models like ARIMA.
 
 ## Data
 
