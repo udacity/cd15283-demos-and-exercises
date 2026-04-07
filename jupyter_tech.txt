@@ -1,0 +1,30 @@
+-jupyter tech
+-film using the same project workspace 
+open it in the classroom, 
+load up workspace
+
+hide the header
+
+
+zoom in to at least 150%
+
+reset and download for files if need to be updated
+
+
+
+deck 1 
+-module 1
+
+deck 2
+-9 modules
+
+
+look smart sheet
+
+do in tableau public
+
+
+-folders all at root repo
+
+
+project instructions in studio
