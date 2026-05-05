@@ -1,13 +1,11 @@
 Demo: Representing Time-Series Data in pandas
 
-We've got three years of daily bike-share ride counts. Before we can forecast anything, we need to get the data into a shape pandas can work with. That means parsing dates and setting a proper time index.
+We have three years of daily bike-share ride counts. Before we can do anything useful with this data, like forecasting it or modeling it or decomposing it, we need to get the time index right. pandas has great support for datetime types but it will not do the work for you. You have to tell it which column is a date and set it as your index.
 
-First, let's load the CSV without telling pandas about the dates. See what happens -- the date column comes in as a string. The index is just row numbers. pandas has no idea this is time-series data.
+We load the CSV and see what we get by default. The date column is an object which is just a string and the index is a boring RangeIndex. pandas does not know this is time-series data. We fix both at once by passing parse_dates=["date"] and setting that column as the index which changes the index type to DatetimeIndex and unlocks resampling, time-based slicing, and frequency detection.
 
-Now we fix it. We pass `parse_dates=["date"]` when loading, then set that column as the index. The index type changes from RangeIndex to DatetimeIndex. That one change unlocks everything -- resampling, time-based slicing, frequency detection.
+Three years of daily data should be about 1,096 rows and we have a different number so we build a complete date range with pd.date_range and use .difference() to find what is missing. We also have more rows than expected dates which means there are duplicates somewhere and you would only catch this by checking the index because summary statistics will not help.
 
-Next we check for gaps. Three years of daily data should give us about 1,096 rows. We build a complete date range with `pd.date_range` and use `.difference()` to find what's missing. There are a few gaps and some duplicates. You'd never catch this from summary statistics alone.
+Then we resample. .resample("W").sum() aggregates daily rides into weekly totals and .resample("MS").sum() gives us monthly. When you plot all three side by side the tradeoff is clear. Daily is noisy, weekly is cleaner, and monthly shows the seasonal pattern with rides peaking in summer and dropping in winter.
 
-Then we resample. `.resample("W").sum()` aggregates daily rides into weekly totals. `.resample("MS").sum()` gives us monthly. When you plot all three side by side, the tradeoff is clear -- daily is noisy, weekly is cleaner, monthly shows the seasonal pattern. Rides peak in summer, drop in winter. That shape is what forecasting models will try to capture.
-
-The takeaway: getting the time index right is always step one. Everything else depends on it.
+Getting the time index right is always step one because everything else depends on it.

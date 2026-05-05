@@ -99,6 +99,10 @@ def build_spreadsheet(out_path: Path, include_formulas: bool, include_chart: boo
             chart.add_data(data_ref, titles_from_data=True)
 
         chart.set_categories(dates_ref)
+        chart.x_axis.delete = False
+        chart.y_axis.delete = False
+        chart.x_axis.numFmt = "YYYY-MM-DD"
+        chart.x_axis.majorUnit = 30
         ws.add_chart(chart, "H2")
 
     # Column widths
