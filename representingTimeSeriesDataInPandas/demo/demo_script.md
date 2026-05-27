@@ -1,6 +1,8 @@
 Demo: Representing Time-Series Data in pandas
 
-We have three years of daily bike-share ride counts. Before we can do anything useful with this data, like forecasting it or modeling it or decomposing it, we need to get the time index right. pandas has great support for datetime types but it will not do the work for you. You have to tell it which column is a date and set it as your index.
+In this demonstration, we are investigating how to represent time-series data in python using the pandas library. For this, we have three years of daily bike-share ride counts. 
+
+Before we can do anything useful with this data. like forecasting, modeling or decomposing, we need to ensure the data is set up with the correct time index. pandas has great support for datetime types but it will not do the work for you. You have to tell it which column is a date and set it as your index.
 
 We load the CSV and see what we get by default. The date column is an object which is just a string and the index is a boring RangeIndex. pandas does not know this is time-series data. We fix both at once by passing parse_dates=["date"] and setting that column as the index which changes the index type to DatetimeIndex and unlocks resampling, time-based slicing, and frequency detection.
 
