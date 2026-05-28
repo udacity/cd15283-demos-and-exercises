@@ -1,15 +1,11 @@
-Running Time-Series Diagnostics
+Solution: Running Time-Series Diagnostics in Python
 
-Fitting a model is half the job. Checking whether it actually captured the signal is the other half. If the residuals still have structure, your forecasts and intervals can't be trusted.
+The exercise gives you electricity demand data and asks you to fit two models, then determine which one is trustworthy enough for production. This is a validation problem, not a fitting problem.
 
-Fit ARIMA(2,1,1) and SARIMAX(1,1,1)(1,1,1,12) with temperature on the training data. Then look at the residuals.
+Load electricity_demand.csv, parse dates, set index, enforce monthly frequency. Split at the end of 2023: everything before is training, everything after is test. Fit ARIMA(2,1,1) with no seasonal or exogenous components. Fit SARIMAX(1,1,1)(1,1,1,12) with avg_temp_f as a regressor passed in as a DataFrame via the exog argument.
 
-Plot them first. Good residuals look like random noise scattered around zero. Bad residuals have visible trends or repeating patterns that the model missed.
+For each fitted model, extract the residuals with .resid. Run acorr_ljungbox at lag 12 with return_df=True to get a p-value that summarizes whether any autocorrelation remains across the first twelve lags. Above 0.05 means the residuals are consistent with white noise. Below means the model left predictable structure on the table. Then run stats.normaltest on the residuals to check whether the prediction intervals can be trusted—if the residuals are not normal, the stated confidence level is approximate. Extract AIC and BIC from each fitted model.
 
-Check the ACF of the residuals. Spikes above the confidence band mean the model left predictable structure on the table. There's still signal in what the model called noise.
+Build a comparison table with Ljung-Box p-value, normality p-value, AIC, and BIC for both models. For the electricity demand dataset, ARIMA fails the Ljung-Box test at lag twelve because it has no seasonal component—the annual cycle is still sitting in the residuals. SARIMAX passes because the seasonal terms captured that cycle. SARIMAX also wins on AIC and BIC, which tells you the extra parameters were worth the complexity.
 
-Run the Ljung-Box test for the formal version. Above 0.05 means white noise. Below means the model is incomplete.
-
-Check normality. This matters for prediction intervals. If the residuals aren't normal, the 95% interval isn't actually 95%. The model is still useful but the confidence level is approximate. In high-stakes forecasting that approximation matters. In low-stakes directional estimates it matters less.
-
-Compare AIC and BIC. Lower is better. SARIMAX should win here because temperature explains real variance. But don't just pick the lowest AIC. The diagnostics tell you whether either model is actually trustworthy.
+The residual ACF plot shows both models on two subplots. ARIMA has a spike at lag twelve sticking out past the confidence band—that is the missed annual cycle. SARIMAX has no such spike. The plot makes visible what the Ljung-Box test summarized as a single number.

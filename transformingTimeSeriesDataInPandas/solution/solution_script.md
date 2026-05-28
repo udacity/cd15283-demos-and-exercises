@@ -1,13 +1,11 @@
-Transforming Time-Series Data in pandas
+Solution: Transforming Time-Series Data in pandas
 
-Forecasting models assume stationarity. Real data never starts that way. You need to check and fix it.
+The exercise gives you two series—bike-share rides and Melbourne temperatures—and asks which one is already stationary and which needs transformation before ARIMA. This is a decision problem, not a rote application of diff().
 
-Clean the data first. Deduplicate, fix the October 2023 unit error where hourly counts got recorded instead of daily, drop negatives, interpolate gaps.
+Load both datasets with parse_dates and set_index so each has a DatetimeIndex. For the bike rides, compute a 30-day rolling mean and standard deviation. The mean shows a clear seasonal wave that confirms the mean is changing over time. The standard deviation stays roughly flat, which tells you the variability itself is stable. That combination—drifting mean, stable variance—is the signature of a series that needs differencing, not a log transform.
 
-Compute a 30-day rolling mean and standard deviation. If the rolling mean waves up and down seasonally, the mean is changing over time. That's not stationary. The rolling std staying flat tells you the variability itself is stable.
+Run ADF on the raw bike rides with autolag="AIC". The p-value comes out above 0.05, confirming non-stationary. Apply first differencing with diff().dropna(). What was "4,200 rides today" becomes "+150 rides compared to yesterday." Run ADF again on the differenced output. The p-value drops below 0.05, confirming stationarity.
 
-Eyeballing is a first step. Run the Augmented Dickey-Fuller test for rigor. Below 0.05 means stationary. Above means not. It will confirm what the rolling stats already showed.
+For the Melbourne temperatures, repeat the same steps. The rolling mean is flat, and the ADF p-value on the raw series is already below 0.05. That means temperatures are stationary as-is—no differencing needed. The comparison table shows Bike Rides going from non-stationary to stationary, while Melbourne Temps stay stationary throughout.
 
-Differencing fixes it. .diff() replaces each value with the day-over-day change. That removes the level and usually the trend. Run ADF again on the differenced series and it should pass.
-
-Split train and test chronologically. Never random. You predict the future from the past, not the middle from the edges.
+The plot shows the original bike rides with the rolling mean and a one-standard-deviation band overlaid, and below it the differenced series with a zero line. The visual confirms what the test said: the original has a seasonal wave, the differenced version is flat around zero.

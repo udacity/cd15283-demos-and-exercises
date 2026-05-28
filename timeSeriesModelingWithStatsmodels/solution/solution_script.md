@@ -1,13 +1,9 @@
-Time-Series Modeling with statsmodels
+Solution: Time-Series Modeling with statsmodels
 
-Eight years of monthly electricity demand plus temperature. Grid operators need twelve months ahead to plan capacity.
+The exercise gives you monthly airline passenger data and asks whether adding a seasonal component is worth the extra complexity. This is a model selection problem, not a parameter-tuning drill.
 
-Split at end of 2023. Everything before is training. 2024 is the test set.
+Load airline_passengers.csv, parse the date column, set it as the index, and enforce monthly frequency. Split chronologically: hold out the last twelve months as test. Fit ARIMA(2,1,1) with no seasonal or exogenous components. This model has no idea that demand peaks in summer, so it treats the seasonal cycle as noise. Call get_forecast(steps=12) and extract predicted_mean and conf_int().
 
-Don't just throw a model at it. Look at the autocorrelation structure first. Seasonally difference at lag 12 to strip out the annual cycle. Check ACF and PACF on what's left. The spike at lag 1 in the ACF means you need an MA(1) term. The seasonal spikes at lag 12 mean you need seasonal AR and MA.
+Next, fit SARIMAX(1,1,1)(1,1,1,12). The seasonal_order tells the model to look twelve months back for repeating patterns. Generate the same twelve-month forecast. Extract the prediction intervals for both models. Compare the average interval width: ARIMA produces wide intervals because it has no seasonal component. SARIMAX produces tighter intervals because the seasonal terms explain variation that ARIMA treated as uncertainty.
 
-Start with plain ARIMA(2,1,1). No seasonality, no temperature. It fits, it forecasts, but the prediction intervals are wide because the model has no idea what July demand looks like versus January. It's treating the seasonal cycle as noise.
-
-Then SARIMAX(1,1,1)(1,1,1,12) with temperature as exogenous. The AIC drops substantially. Temperature is genuinely helping. For future temps use seasonal averages from training. In production you'd plug in actual weather forecasts.
-
-The difference between the two forecasts is in the intervals. SARIMAX intervals are tighter because the seasonal component and temperature explain variation that ARIMA treats as uncertainty. For grid operators that's the whole point. They need to know the actual range of demand they must prepare for.
+Build a comparison table with AIC, BIC, and average interval width for both models. For the airline data, SARIMAX wins on all three metrics. The better model is the one with lower AIC. The plot shows the two forecasts side by side against train and test. The difference in interval width is the value of adding domain knowledge.

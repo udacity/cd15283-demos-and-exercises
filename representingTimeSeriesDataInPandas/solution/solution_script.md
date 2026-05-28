@@ -1,9 +1,9 @@
-Representing Time-Series Data in pandas
+Solution: Representing Time-Series Data in pandas
 
-You've got daily bike-share counts but pandas doesn't know the date column is a date. It's just a string, and the index is row numbers. Fix that first.
+The exercise asks whether weekend rides are consistently higher, and whether that pattern is seasonal (stronger in summer) or structural (consistent year-round). This is an analysis question, not a syntax test.
 
-Use parse_dates and set_index to get a DatetimeIndex. That unlocks everything else: resampling, time-based slicing, frequency detection.
+First, load the bikeshare_rides.csv, parse the date column as datetime, and set it as the index. Deduplicate any repeated dates. Then create two new columns: one for the month (as a period) and one for the day of week. Group by both and compute the average rides per day. That gives you a pivot table where rows are months and columns are days of the week.
 
-Three years of daily data should be about 1,096 rows. Build a complete date range and diff it against your actual index to find gaps. Duplicates won't show up in summary stats. Only the index catches them.
+Next, compute the weekend average (Saturday and Sunday) and the weekday average (Monday through Friday) for each month. Divide the weekend average by the weekday average. That ratio tells you how much higher weekend rides are relative to weekdays. If the ratio varies widely across months—say 1.3 in July but 1.1 in January—the effect is seasonal. If the ratio is stable around 1.2 regardless of month, the effect is structural. Return True if the standard deviation of the ratio exceeds 0.1.
 
-Resample to weekly and monthly. Plot all three. Daily is noisy, weekly is smoother, monthly shows the seasonal shape. That's the point of getting the time index right first.
+The plot shows the average rides by day of week for each month on a single figure. The weekend bars stick out above the weekday bars. Whether that gap widens and narrows across months answers the question.
